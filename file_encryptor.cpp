@@ -110,7 +110,7 @@ void compress_file(const std::string &filename) {
         }
 
         write(fd_out, compressed_data.c_str(), compressed_data.size());
-        compressed_data.clear();  // Limpiar el buffer para la próxima lectura
+        compressed_data.clear();
     }
 
     close(fd_in);
@@ -149,15 +149,15 @@ void decompress_file(const std::string &filename) {
             std::string count_str;
 
             while (i + 1 < bytesRead && std::isdigit(buffer[i + 1])) {
-                count_str += buffer[++i];  // Concatenar los dígitos de la cantidad
+                count_str += buffer[++i];
             }
 
             int count = std::stoi(count_str);
-            decompressed_data.append(count, current);  // Expandir el carácter
+            decompressed_data.append(count, current);
         }
 
         write(fd_out, decompressed_data.c_str(), decompressed_data.size());
-        decompressed_data.clear();  // Limpiar buffer
+        decompressed_data.clear(); 
     }
 
     close(fd_in);
