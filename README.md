@@ -1,5 +1,9 @@
 # Filetool
 
+## Introducción
+
+Filetool es una herramienta de línea de comandos diseñada para encriptar y desencriptar archivos de texto utilizando el cifrado XOR. Permite realizar estas operaciones de manera sencilla mediante argumentos específicos, asegurando la integridad de los archivos de texto sin afectar archivos binarios.
+
 ## Uso
 
 ```sh
