@@ -1,13 +1,10 @@
 #include <iostream>
-#include <fstream>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <cstring>
-#include <vector>
 
 #define BUFFER_SIZE 1024
-#define XOR_KEY 0x5A // Clave para el cifrado XOR
+#define XOR_KEY 0x5A 
 
 void show_help() {
     std::cout << "Uso: filetool [opción] <archivo>\n"
@@ -33,7 +30,7 @@ bool is_text_file(const std::string &filename) {
     close(fd);
     if (bytesRead < 0) return false;
     for (ssize_t i = 0; i < bytesRead; ++i) {
-        if (buffer[i] == 0) return false; // Si hay un byte nulo, probablemente sea binario
+        if (buffer[i] == 0) return false; 
     }
     return true;
 }
@@ -44,13 +41,25 @@ void process_file(const std::string &filename, bool encrypt) {
         perror("Error al abrir el archivo de entrada");
         return;
     }
-    
 
-    // Verificamos si el archivo es de texto antes de procesarlo, ya que el cifrado XOR podría corromper archivos binarios.
-    if (!is_text_file(filename)) {
-        std::cerr << "Error: El archivo no parece ser de texto.\n";
-        close(fd_in); 
+    if (encrypt && filename.size() > 4 && filename.substr(filename.size() - 4) == ".enc") {
+        std::cerr << "Error: El archivo ya está encriptado\n";
+        close(fd_in);
         return;
+    }
+
+    if (encrypt) {
+        if (filename.size() < 4 || filename.substr(filename.size() - 4) != ".txt") {
+            std::cerr << "Error: Solo se pueden encriptar archivos .txt\n";
+            return;
+        }
+    }
+
+    if (!encrypt) {
+        if (filename.size() < 4 || filename.substr(filename.size() - 4) != ".enc") {
+            std::cerr << "Error: Solo se pueden desencriptar archivos .enc\n";
+            return;
+        }
     }
 
     std::string out_filename = filename + (encrypt ? ".enc" : ".dec");
@@ -60,16 +69,16 @@ void process_file(const std::string &filename, bool encrypt) {
         close(fd_in);
         return;
     }
-    
+
     char buffer[BUFFER_SIZE];
     ssize_t bytesRead;
     while ((bytesRead = read(fd_in, buffer, BUFFER_SIZE)) > 0) {
         for (ssize_t i = 0; i < bytesRead; ++i) {
-            buffer[i] ^= XOR_KEY; // Cifrado XOR
+            buffer[i] ^= XOR_KEY; 
         }
         write(fd_out, buffer, bytesRead);
     }
-    
+
     close(fd_in);
     close(fd_out);
     std::cout << "Archivo procesado: " << out_filename << "\n";
