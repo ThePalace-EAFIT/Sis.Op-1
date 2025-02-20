@@ -18,7 +18,7 @@ void show_help() {
 }
 
 void show_version() {
-    std::cout << "filetool v1.0\n";
+    std::cout << "filetool v1.2\n";
 }
 
 void process_file(const std::string &filename, bool encrypt) {
@@ -77,13 +77,13 @@ void compress_file(const std::string &filename) {
         return;
     }
 
-    if (filename.size() > 4 && filename.substr(filename.size() - 4) == ".rle") {
+    if (filename.size() > 4 && filename.substr(filename.size() - 4) == ".com") {
         std::cerr << "Error: El archivo ya está comprimido\n";
         close(fd_in);
         return;
     }
 
-    std::string out_filename = filename + ".rle";
+    std::string out_filename = filename + ".com";
     int fd_out = open(out_filename.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (fd_out < 0) {
         perror("Error al crear el archivo de salida");
@@ -110,7 +110,7 @@ void compress_file(const std::string &filename) {
         }
 
         write(fd_out, compressed_data.c_str(), compressed_data.size());
-        compressed_data.clear();
+        compressed_data.clear();  
     }
 
     close(fd_in);
@@ -125,13 +125,18 @@ void decompress_file(const std::string &filename) {
         return;
     }
 
-    if (filename.size() < 4 || filename.substr(filename.size() - 4) != ".rle") {
-        std::cerr << "Error: Solo se pueden descomprimir archivos .rle\n";
+    if (filename.size() < 4 || filename.substr(filename.size() - 4) != ".com") {
+        std::cerr << "Error: Solo se pueden descomprimir archivos .com\n";
         close(fd_in);
         return;
     }
 
-    std::string out_filename = filename.substr(0, filename.size() - 4) + ".dec";
+    if (filename.size() < 4 || filename.substr(filename.size() - 4) != ".txt") {
+        std::cerr << "Error: Solo se pueden comprimir archivos .txt\n";
+        return;
+    }
+
+    std::string out_filename = filename.substr(0, filename.size() - 4) + ".dcom";
     int fd_out = open(out_filename.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (fd_out < 0) {
         perror("Error al crear el archivo de salida");
@@ -149,11 +154,11 @@ void decompress_file(const std::string &filename) {
             std::string count_str;
 
             while (i + 1 < bytesRead && std::isdigit(buffer[i + 1])) {
-                count_str += buffer[++i];
+                count_str += buffer[++i]; 
             }
 
             int count = std::stoi(count_str);
-            decompressed_data.append(count, current);
+            decompressed_data.append(count, current); 
         }
 
         write(fd_out, decompressed_data.c_str(), decompressed_data.size());
@@ -190,4 +195,4 @@ int main(int argc, char *argv[]) {
         return 1;
     }
     return 0;
-}
+} 
