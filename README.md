@@ -75,7 +75,7 @@ g++ filetool.cpp -o filetool
 
 ## Autores
 
-- Erick 
+- Erick Ochoa
 - Silvia Katheryn Cáceres Vásquez
 - Santiago Palacio García
 - Santiago Vélez Blandón
