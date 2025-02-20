@@ -77,6 +77,11 @@ void compress_file(const std::string &filename) {
         return;
     }
 
+    if (filename.size() < 4 || filename.substr(filename.size() - 4) != ".txt") {
+        std::cerr << "Error: Solo se pueden comprimir archivos .txt\n";
+        return;
+    }
+
     if (filename.size() > 4 && filename.substr(filename.size() - 4) == ".com") {
         std::cerr << "Error: El archivo ya está comprimido\n";
         close(fd_in);
@@ -128,11 +133,6 @@ void decompress_file(const std::string &filename) {
     if (filename.size() < 4 || filename.substr(filename.size() - 4) != ".com") {
         std::cerr << "Error: Solo se pueden descomprimir archivos .com\n";
         close(fd_in);
-        return;
-    }
-
-    if (filename.size() < 4 || filename.substr(filename.size() - 4) != ".txt") {
-        std::cerr << "Error: Solo se pueden comprimir archivos .txt\n";
         return;
     }
 
