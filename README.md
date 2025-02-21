@@ -2,12 +2,12 @@
 
 ## Introducción
 
-Filetool es una herramienta de línea de comandos diseñada para encriptar y desencriptar archivos de texto utilizando el cifrado XOR. Permite realizar estas operaciones de manera sencilla mediante argumentos específicos, asegurando la integridad de los archivos de texto sin afectar archivos binarios.
+Filetool es una herramienta de línea de comandos diseñada para encriptar y desencriptar archivos de texto utilizando el cifrado XOR. Adicionalmente tambien permite comprimir y descomprimir archivos de texto usando el algoritmo RLE(Run-Length Encoding). Permite realizar estas operaciones de manera sencilla mediante argumentos específicos, asegurando la integridad de los archivos de texto sin afectar archivos binarios.
 
 ## Uso
 
 ```sh
-filetool [opción] <archivo>
+./filetool [opción] <archivo>
 ```
 
 Donde:  
@@ -26,12 +26,14 @@ filetool -e documento.txt
 - `-v, --version` : Muestra la versión del programa.
 - `-e, --encrypt <archivo>` : Cifra un archivo de texto.
 - `-d, --decrypt <archivo>` : Descifra un archivo previamente cifrado.
+- `-c, --compress <archivo>` : Comprime un archivo de texto
+- `-x, --decompress <archivo>` : Descomprime un archivo previamente compreso 
 
 ## Justificación de la detección del tipo de archivo
 
-El programa incluye una función `is_text_file()` que verifica si el archivo de entrada es de texto o binario. Esto se hace leyendo un fragmento del archivo y comprobando la presencia de bytes nulos (`0x00`), los cuales son característicos de archivos binarios.
+El programa incluye una función `process_file()` que incluye multiples verificaciones en el archivo de entrada asegurandose de que sea un archivo de texto .txt para que los algoritmos puedan funcionar correctamente.
 
-Se implementa esta verificación para evitar que el cifrado XOR corrompa archivos no textuales. Los archivos binarios pueden contener estructuras internas que, al ser modificadas por un cifrado simple como XOR, podrían volverse inutilizables. Por este motivo, el programa solo permite procesar archivos de texto.
+Se implementa esta verificación para evitar que el cifrado XOR y la compresion RLE corrompan archivos no textuales. Los archivos de otros tipos pueden contener estructuras internas que, al ser modificadas por un cifrado simple como XOR o una compresion basica como RLE, podrían volverse inutilizables. Por este motivo, el programa solo permite procesar archivos de texto.
 
 ## Ejemplos de uso
 
